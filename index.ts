@@ -66,10 +66,10 @@ const newRoutes = (gym: any) => {
     });
   });
   if (uudetReitit !== undefined) {
-    console.log(uudetReitit.replace("undefined", ""));
+    console.log("Herttoniemi \n \n" + uudetReitit.replace("undefined", ""));
     bot.telegram.sendMessage(
       process.env.CHAT,
-      uudetReitit.replace("undefined", "")
+      "Herttoniemi \n \n" + uudetReitit.replace("undefined", "")
     );
   } else {
     console.log("nothing to post");
