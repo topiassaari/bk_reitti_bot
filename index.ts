@@ -67,8 +67,10 @@ const newRoutes = (gym: any) => {
   });
   if (uudetReitit !== undefined) {
     console.log(uudetReitit.replace("undefined", ""));
-    bot.telegram.sendMessage(process.env.CHAT, uudetReitit);
-    return uudetReitit;
+    bot.telegram.sendMessage(
+      process.env.CHAT,
+      uudetReitit.replace("undefined", "")
+    );
   } else {
     console.log("nothing to post");
     return null;
