@@ -5,10 +5,12 @@ const cron = require("node-cron");
 const express = require("express");
 import login from "./login";
 import parseNewRoutes from "./newRoutes";
+const fs = require("fs");
 
+//set up server and directory for data
 const app = express();
 app.listen(8080);
-app.get("js/index.js", (res: any) => res.send("bk_botti"));
+fs.mkdirSync("./json");
 
 // set up bot
 const token = process.env.BOT_TOKEN;
@@ -44,7 +46,7 @@ bot.command("/month", (ctx) => {
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
-//login to problemator
+//start cron process
 cron.schedule("00 16 * * *", function () {
   login();
   if (parseNewRoutes("hours") !== "eioo")
