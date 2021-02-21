@@ -4,50 +4,37 @@ import * as dotenv from "dotenv";
 import { CronJob } from "cron";
 dotenv.config();
 
-// set up bot
-const token = process.env.BOT_TOKEN;
-if (token === undefined) {
-  throw new Error("BOT_TOKEN must be provided!");
-}
-const bot = new Telegraf(process.env.BOT_TOKEN);
-bot.start((ctx) => ctx.reply("bk herttoniemi uudet reitit"));
-bot.command("/id", (ctx) => {
-  ctx.reply(JSON.stringify(ctx.message));
-});
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
-
 //login to problemator
 const login = async () => {
-  const loginConfig = {
-    method: "get",
-    url:
-      "https://www.problemator.fi/t/problematorapi/v01/dologin?username=" +
+  let response = await axios.get(
+    "https://www.problemator.fi/t/problematorapi/v01/dologin?username=" +
       process.env.USERNAME +
       "&password=" +
-      process.env.PASSWORD,
-  };
-  let response = await axios(loginConfig as any);
+      process.env.PASSWORD
+  );
   const session = response.headers["set-cookie"][0].split(" ")[0];
   const auth = response.headers["set-cookie"][1].split(" ")[0].split("=")[1];
-  const routeConfig = {
-    method: "get",
-    url:
+
+  await axios
+    .get(
       "https://www.problemator.fi/t/problematorapi/v01/problems/?react=true&loc=3",
-    headers: {
-      authID: auth,
-      Cookie: session + auth,
-    },
-  };
-  await axios(routeConfig as any)
+      {
+        headers: {
+          authID: auth,
+          Cookie: session + auth,
+        },
+      }
+    )
     .then((response) => {
       const results = response.data;
-      return newRoutes(results);
+      return results;
     })
     .catch((error) => {
       console.log(error);
     });
 };
+
+var problematorinfo = login();
 
 //parse new routes
 const newRoutes = (gym: any) => {
@@ -58,7 +45,7 @@ const newRoutes = (gym: any) => {
       const wall = problem.wallchar;
       const color = problem.colour;
       const addeddate = problem.addedrelative;
-      if (addeddate.includes("hours ago")) {
+      if (addeddate.includes("days ago")) {
         uudetReitit += grade + " " + color + " " + wall + " \n";
       } else {
         return null;
@@ -66,18 +53,45 @@ const newRoutes = (gym: any) => {
     });
   });
   if (uudetReitit !== undefined) {
-    console.log("Herttoniemi \n \n" + uudetReitit.replace("undefined", ""));
-    bot.telegram.sendMessage(
-      process.env.CHAT,
-      "Herttoniemi \n \n" + uudetReitit.replace("undefined", "")
-    );
+    var reitit = "Herttoniemi \n \n" + uudetReitit.replace("undefined", "");
+    console.log(reitit);
+    return reitit;
   } else {
-    console.log("nothing to post");
     return null;
   }
 };
 
+var newStuff = newRoutes(problematorinfo);
+
+// set up bot
+const token = process.env.BOT_TOKEN;
+if (token === undefined) {
+  throw new Error("BOT_TOKEN must be provided!");
+}
+const bot = new Telegraf(process.env.BOT_TOKEN);
+//commands
+bot.start((ctx) => ctx.reply("botti päällä"));
+bot.command("/id", (ctx) => {
+  ctx.reply(JSON.stringify(ctx.message));
+});
+bot.command("/uudet", (ctx) => {
+  if (newStuff) {
+    ctx.reply(newStuff);
+  } else {
+    ctx.reply("ei mitään uutta");
+  }
+});
+
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
 //run it
-var job = new CronJob("00 16 * * *", login());
+var job = new CronJob("00 16 * * *", () => {
+  //bot.telegram.sendMessage(process.env.CHAT, newStuff);
+  console.log(newStuff);
+});
+var testjob = new CronJob("* * * * *", console.log("pimpom"));
+
 job.start();
+testjob.start();
 bot.launch();
