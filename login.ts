@@ -27,6 +27,7 @@ const login = async () => {
   await axios(routeConfig as any)
     .then((response) => {
       let result = JSON.stringify(response.data);
+
       fs.writeFileSync("./json/herttoniemi_reitit.json", result);
       console.log(result);
     })
