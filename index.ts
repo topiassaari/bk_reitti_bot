@@ -1,11 +1,11 @@
 import * as dotenv from "dotenv";
-dotenv.config();
 import { Telegraf } from "telegraf";
-const cron = require("node-cron");
-const express = require("express");
 import login from "./login";
 import parseNewRoutes from "./newRoutes";
 const fs = require("fs");
+const cron = require("node-cron");
+const express = require("express");
+dotenv.config();
 
 //set up server and directory for data
 const app = express();
@@ -29,7 +29,7 @@ bot.command("/week", (ctx) => {
   ctx.reply(
     "Tänään:\n" +
       parseNewRoutes("hours") +
-      "\n \n \n Tällä viikolla:\n" +
+      "\n \n \nTällä viikolla:\n" +
       parseNewRoutes("days")
   );
 });
@@ -37,9 +37,9 @@ bot.command("/month", (ctx) => {
   ctx.reply(
     "Tänään:\n" +
       parseNewRoutes("hours") +
-      "\n \n \n Tällä viikolla:\n" +
+      "\n\n\nTällä viikolla:\n" +
       parseNewRoutes("days") +
-      "\n \n \n Tässä kuussa:\n" +
+      "\n\n\nTässä kuussa:\n" +
       parseNewRoutes("weeks")
   );
 });
@@ -49,8 +49,12 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 //start cron process
 cron.schedule("00 16 * * *", function () {
   login();
-  if (parseNewRoutes("hours") !== "eioo")
+  if (parseNewRoutes("hours") !== "eioo") {
     bot.telegram.sendMessage(process.env.CHAT, parseNewRoutes("hours"));
+  } else {
+    console.log("no new routes to post");
+  }
 });
+
 login();
 bot.launch();
