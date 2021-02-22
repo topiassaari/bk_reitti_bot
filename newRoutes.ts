@@ -12,7 +12,7 @@ const parseNewRoutes = (timeSpan: any) => {
       const wall = problem.wallchar;
       const color = problem.colour;
       const addeddate = problem.addedrelative;
-      if (addeddate.includes(timeSpan + " ago")) {
+      if (addeddate.includes(timeSpan)) {
         uudetReitit += grade + " " + color + " " + wall + " \n";
         return uudetReitit;
       } else {

@@ -23,24 +23,24 @@ bot.command("/id", (ctx) => {
   ctx.reply(JSON.stringify(ctx.message));
 });
 bot.command("/day", (ctx) => {
-  ctx.reply("Tänään:\n" + parseNewRoutes("hours"));
+  ctx.reply("Tänään:\n" + parseNewRoutes("hour"));
 });
 bot.command("/week", (ctx) => {
   ctx.reply(
     "Tänään:\n" +
-      parseNewRoutes("hours") +
+      parseNewRoutes("hour") +
       "\n \n \nTällä viikolla:\n" +
-      parseNewRoutes("days")
+      parseNewRoutes("day")
   );
 });
 bot.command("/month", (ctx) => {
   ctx.reply(
     "Tänään:\n" +
-      parseNewRoutes("hours") +
+      parseNewRoutes("hour") +
       "\n\n\nTällä viikolla:\n" +
-      parseNewRoutes("days") +
+      parseNewRoutes("day") +
       "\n\n\nTässä kuussa:\n" +
-      parseNewRoutes("weeks")
+      parseNewRoutes("week")
   );
 });
 process.once("SIGINT", () => bot.stop("SIGINT"));
@@ -49,8 +49,8 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 //start cron process
 cron.schedule("00 16 * * *", function () {
   login();
-  if (parseNewRoutes("hours") !== "eioo") {
-    bot.telegram.sendMessage(process.env.CHAT, parseNewRoutes("hours"));
+  if (parseNewRoutes("hour") !== "eioo") {
+    bot.telegram.sendMessage(process.env.CHAT, parseNewRoutes("hour"));
   } else {
     console.log("no new routes to post");
   }
