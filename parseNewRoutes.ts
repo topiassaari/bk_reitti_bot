@@ -13,7 +13,7 @@ const parseNewRoutes = (gym: any) => {
       if (
         addeddate.includes("second") ||
         addeddate.includes("minute") ||
-        addeddate.includes("hour")
+        addeddate.includes([1 - 9] + " hour")
       ) {
         uudetReitit += grade + " " + color + " " + wall + " \n";
         return uudetReitit;
