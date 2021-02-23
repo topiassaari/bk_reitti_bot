@@ -1,18 +1,20 @@
 const fs = require("fs");
 
 //parse new routes
-const parseNewRoutes = (timeSpan: any) => {
-  var herttoniemi = JSON.parse(
-    fs.readFileSync("./json/herttoniemi_reitit.json")
-  );
+const parseNewRoutes = (gym: any) => {
+  var gym = JSON.parse(fs.readFileSync("./json/" + gym + "_reitit.json"));
   var uudetReitit: any;
-  Object.entries(herttoniemi).forEach((sector: any) => {
+  Object.entries(gym).forEach((sector: any) => {
     sector[1].problems.forEach((problem: any) => {
       const grade = problem.gradename;
       const wall = problem.wallchar;
       const color = problem.colour;
       const addeddate = problem.addedrelative;
-      if (addeddate.includes(timeSpan)) {
+      if (
+        addeddate.includes("second") ||
+        addeddate.includes("minute") ||
+        addeddate.includes("hour")
+      ) {
         uudetReitit += grade + " " + color + " " + wall + " \n";
         return uudetReitit;
       } else {
@@ -20,14 +22,13 @@ const parseNewRoutes = (timeSpan: any) => {
       }
     });
   });
-  var herttoniemiNewRoutes;
+  var NewRoutes;
   if (uudetReitit !== undefined) {
-    herttoniemiNewRoutes = uudetReitit.replace("undefined", "");
+    NewRoutes = uudetReitit.replace("undefined", "");
   } else {
-    herttoniemiNewRoutes = "eioo";
+    NewRoutes = "eioo";
   }
-  console.log(herttoniemiNewRoutes);
-  return herttoniemiNewRoutes;
+  fs.writeFileSync("./json/uudet" + gym.name + "_uudet_reitit.json", NewRoutes);
+  return NewRoutes;
 };
-
 export default parseNewRoutes;
