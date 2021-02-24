@@ -14,6 +14,15 @@ fs.mkdirSync("./json");
 fetchRoutes();
 const namesOfGyms = ["pasila", "konala", "herttoniemi", "espoo"];
 
+const getToday = () => {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+  var ddmmyyyy = dd + "/" + mm + "/" + yyyy;
+  return ddmmyyyy;
+};
+
 // set up bot
 const token = process.env.BOT_TOKEN;
 if (token === undefined) {
@@ -28,7 +37,7 @@ bot.command("/id", (ctx) => {
 });
 namesOfGyms.forEach((gym) => {
   bot.command("/" + gym, (ctx) => {
-    ctx.reply(gym + ": \n\n" + parseNewRoutes(gym));
+    ctx.reply(getToday() + "\n" + gym + "\n\n" + parseNewRoutes(gym));
   });
 });
 process.once("SIGINT", () => bot.stop("SIGINT"));
@@ -41,7 +50,7 @@ cron.schedule("00 14 * * *", () => {
     if (parseNewRoutes(gym) !== "eioo") {
       bot.telegram.sendMessage(
         process.env.CHAT,
-        gym + ", tänään:\n\n" + parseNewRoutes(gym)
+        getToday() + "\n" + gym + "\n\n" + parseNewRoutes(gym)
       );
     } else {
       console.log("no new routes to post today");
