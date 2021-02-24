@@ -41,7 +41,7 @@ cron.schedule("00 14 * * *", () => {
     if (parseNewRoutes(gym) !== "eioo") {
       bot.telegram.sendMessage(
         process.env.CHAT,
-        gym + ", tänään:" + parseNewRoutes(gym)
+        gym + ", tänään:\n\n" + parseNewRoutes(gym)
       );
     } else {
       console.log("no new routes to post today");

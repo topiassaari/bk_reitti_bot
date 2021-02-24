@@ -24,7 +24,7 @@ const fetchRoutes = async () => {
         { name: "pasila", id: 1 },
         { name: "konala", id: 2 },
         { name: "herttoniemi", id: 3 },
-        { name: "espoo", id: 4 },
+        { name: "espoo", id: 132 },
       ];
 
       gyms.forEach((gym) => {
