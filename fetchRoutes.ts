@@ -1,8 +1,7 @@
-import axios from "axios";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+const axios = require("axios");
+const dotenv = require("dotenv");
 const fs = require("fs");
+dotenv.config();
 
 const fetchRoutes = async () => {
   await axios
@@ -12,18 +11,16 @@ const fetchRoutes = async () => {
         "&password=" +
         process.env.PASSWORD
     )
-    .then((response) => {
+    .then((response: any) => {
       const session = response.headers["set-cookie"][0].split(" ")[0];
       const auth = response.headers["set-cookie"][1]
         .split(" ")[0]
         .split("=")[1];
-
       const loginInfo = [session, auth];
-
       return loginInfo;
     })
-    .then((loginInfo) => {
-      var gyms = [
+    .then((loginInfo: any) => {
+      const gyms = [
         { name: "pasila", id: 1 },
         { name: "konala", id: 2 },
         { name: "herttoniemi", id: 3 },
@@ -42,17 +39,17 @@ const fetchRoutes = async () => {
               },
             }
           )
-          .then((response) => {
+          .then((response: any) => {
             let result = JSON.stringify(response.data);
             fs.writeFileSync("./json/" + gym.name + "_reitit.json", result);
             console.log(result);
           })
-          .catch((error) => {
+          .catch((error: any) => {
             console.log(error);
           });
       });
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.log(error);
     });
 };
