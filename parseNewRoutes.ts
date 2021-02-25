@@ -17,7 +17,7 @@ const parseNewRoutes = (gym: any) => {
       //if a route has been added within the last 9h...
       if (
         addeddate.includes("second") ||
-        addeddate.includes("minute") ||
+        addeddate.includes("mins") ||
         addeddate.match(/\d (hour|hours) ago/)
       ) {
         //...add it to a string of new routes
