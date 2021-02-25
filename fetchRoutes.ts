@@ -26,7 +26,6 @@ const fetchRoutes = async () => {
         { name: "herttoniemi", id: 3 },
         { name: "espoo", id: 132 },
       ];
-
       gyms.forEach((gym) => {
         axios
           .get(
