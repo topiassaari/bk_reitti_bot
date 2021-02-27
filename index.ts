@@ -45,17 +45,18 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 //every day, get the newest routes, and if there are any, post them to the groupchat
 cron.schedule("00 7-17/2 * * MON-FRI", () => {
-  fetchRoutes();
-  namesOfGyms.forEach((gym) => {
-    var routes = parseNewRoutes(gym, "now");
-    if (routes !== "eioo") {
-      bot.telegram.sendMessage(
-        process.env.CHAT,
-        getToday() + "\n" + gym + "\n\n" + routes
-      );
-    } else {
-      console.log("no new routes to post today");
-    }
+  fetchRoutes().then(() => {
+    namesOfGyms.forEach((gym) => {
+      var routes = parseNewRoutes(gym, "now");
+      if (routes !== "eioo") {
+        bot.telegram.sendMessage(
+          process.env.CHAT,
+          getToday() + "\n" + gym + "\n\n" + routes
+        );
+      } else {
+        console.log("no new routes to post today");
+      }
+    });
   });
 });
 
