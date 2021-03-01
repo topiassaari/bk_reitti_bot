@@ -41,7 +41,6 @@ const fetchRoutes = async () => {
           .then((response: any) => {
             let result = JSON.stringify(response.data);
             fs.writeFileSync("./json/" + gym.name + "_reitit.json", result);
-            console.log(result);
           })
           .catch((error: any) => {
             console.log(error);
