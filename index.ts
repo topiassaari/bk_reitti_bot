@@ -45,7 +45,8 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 //every day, get the newest routes, and if there are any, post them to the groupchat
 cron.schedule("00 7-17/2 * * MON-FRI", () => {
-  fetchRoutes().then(() => {
+  fetchRoutes();
+  setTimeout(() => {
     namesOfGyms.forEach((gym) => {
       var routes = parseNewRoutes(gym, "now");
       console.log(routes);
@@ -58,7 +59,7 @@ cron.schedule("00 7-17/2 * * MON-FRI", () => {
         console.log("no new routes to post today");
       }
     });
-  });
+  }, 10000);
 });
 
 bot.launch();
