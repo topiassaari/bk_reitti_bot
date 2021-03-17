@@ -48,12 +48,10 @@ cron.schedule("00 7-17/2 * * MON-FRI", () => {
   fetchRoutes();
   setTimeout(() => {
     namesOfGyms.forEach((gym) => {
-      var routes = parseNewRoutes(gym, "now");
-      console.log(routes);
-      if (routes !== "eioo") {
+      if (parseNewRoutes(gym, "now") !== "eioo") {
         bot.telegram.sendMessage(
           process.env.CHAT,
-          getToday() + "\n" + gym + "\n\n" + routes
+          getToday() + "\n" + gym + "\n\n" + parseNewRoutes(gym, "now")
         );
       } else {
         console.log("no new routes to post today");
