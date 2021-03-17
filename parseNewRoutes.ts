@@ -19,7 +19,7 @@ const parseNewRoutes = (gym: any, timespan: any) => {
         timespan == "now" &&
         (addeddate.includes("sec") ||
           addeddate.includes("min") ||
-          (addeddate === "1 hour ago"))
+          addeddate.match(/^(1|2) hours? ago/))
       ) {
         //...add it to a string of new routes
         if (!sectorOfNewRoutes.includes(name + " (" + wall + ")\n")) {
