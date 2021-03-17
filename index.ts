@@ -44,20 +44,20 @@ process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 //every day, get the newest routes, and if there are any, post them to the groupchat
-cron.schedule("00 7-17/2 * * MON-FRI", () => {
-  fetchRoutes();
-  setTimeout(() => {
+cron.schedule("00 7-17 * * MON-FRI", () => {
+  fetchRoutes().then(() => {
     namesOfGyms.forEach((gym) => {
-      if (parseNewRoutes(gym, "now") !== "eioo") {
+      var routes = parseNewRoutes(gym, "now")
+      if (routes !== "eioo") {
         bot.telegram.sendMessage(
           process.env.CHAT,
-          getToday() + "\n" + gym + "\n\n" + parseNewRoutes(gym, "now")
+          getToday() + "\n" + gym + "\n\n" + routes
         );
       } else {
         console.log("no new routes to post today");
       }
     });
-  }, 10000);
+  });
 });
 
 bot.launch();
