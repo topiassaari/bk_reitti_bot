@@ -58,6 +58,8 @@ cron.schedule("00 7-17/2 * * MON-FRI", () => {
         console.log("no new routes to post today");
       }
     });
+  }).catch((error: any) => {
+    console.log(error);
   });
 });
 
