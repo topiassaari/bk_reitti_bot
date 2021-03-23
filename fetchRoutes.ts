@@ -18,6 +18,8 @@ const fetchRoutes = async () => {
         .split("=")[1];
       const loginInfo = [session, auth];
       return loginInfo;
+    }).catch((error: any) => {
+      console.log(error);
     })
     .then((loginInfo: any) => {
       const gyms = [
